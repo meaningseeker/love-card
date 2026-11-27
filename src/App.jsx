@@ -143,7 +143,7 @@ export default function App() {
           z-index: 1;
           min-height: 100svh;
           width: 100%;
-          padding: 32px 18px;
+          padding: 100px 32px 18px;
           display: flex;
           flex-direction: column;
           align-items: center;
