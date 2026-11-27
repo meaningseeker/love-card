@@ -130,7 +130,7 @@ export default function App() {
           position: fixed;
           inset: -30px 0 0 0;
           z-index: 0;
-          transform: translateY(-30px);
+          transform: translateY(-100px);
         }
 
         .meadow-background > * {

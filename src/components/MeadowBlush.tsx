@@ -4,6 +4,7 @@
 import { useEffect, useRef } from 'react';
 import type { CSSProperties } from 'react';
 import * as THREE from 'three';
+import { CameraController } from './CameraController';
 
 type RGB = [number, number, number];
 
@@ -274,8 +275,7 @@ function mulberry32(a: number) {
 }
 
 function vfovFor(aspect: number) {
-  const t = clamp((aspect - 0.6) / 1.4, 0, 1);
-  return 50 - 14 * t * t * (3 - 2 * t);
+  return 30;
 }
 
 interface BuildOpts {
@@ -1126,8 +1126,18 @@ export default function MeadowBlush(props: MeadowBlushProps) {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 300);
-    camera.position.set(0, CAM_H, 0);
-    camera.lookAt(0, CAM_H, -10);
+    camera.position.set(
+  -0.17905659470907812,
+  1,
+  0.38280264004689
+);
+
+camera.rotation.set(
+  0,
+  -0.24581179660432048,
+  0
+);
+    const cameraController = new CameraController(camera);
 
     const quadGeo = new THREE.PlaneGeometry(2, 2);
 
@@ -1377,6 +1387,7 @@ export default function MeadowBlush(props: MeadowBlushProps) {
       rafId = requestAnimationFrame(renderFrame);
       const dt = Math.min(0.05, Math.max(0.001, (now - prevTime) / 1000));
       prevTime = now;
+      cameraController.update(dt);
 
       const p = propsRef.current;
       const speedK = clamp(p.speed ?? DEFAULTS.speed, 0, 10) / 10;
@@ -1516,6 +1527,7 @@ export default function MeadowBlush(props: MeadowBlushProps) {
 
     return () => {
       cancelAnimationFrame(rafId);
+      cameraController.dispose();
       ro.disconnect();
       dom.removeEventListener('pointermove', onPointerMove);
       dom.removeEventListener('pointerdown', onPointerDown);
