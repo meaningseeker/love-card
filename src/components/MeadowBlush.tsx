@@ -1545,7 +1545,6 @@ export default function MeadowBlush(props: MeadowBlushProps) {
         width: '100%',
         height: '100%',
         minHeight: '360px',
-        overflow: 'hidden',
         ...style,
       }}
     />
