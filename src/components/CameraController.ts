@@ -142,19 +142,74 @@ export class CameraController {
         duration: 1900,
         easing: 'cubic-bezier(0.22, 0.61, 0.36, 1)',
         fill: 'forwards',
-      }
+      },
     );
 
     animation.onfinish = () => cloud.remove();
   }
 
+
+  private logCameraSettings() {
+    this.camera.updateMatrixWorld(true);
+
+    const p = this.camera.position;
+    const r = this.camera.rotation;
+    const direction = new THREE.Vector3();
+    this.camera.getWorldDirection(direction);
+
+    const degrees = THREE.MathUtils.radToDeg;
+
+    console.group('📷 CAMERA SETTINGS');
+    console.log('Position:', {
+      x: p.x, y: p.y, z: p.z
+    });
+    console.log('Rotation (radians):', {
+      x: r.x, y: r.y, z: r.z
+    });
+    console.log('Rotation (degrees):', {
+      x: degrees(r.x), y: degrees(r.y), z: degrees(r.z)
+    });
+    console.log('Rotation order:', r.order);
+    console.log('Look direction:', direction);
+    console.log('Camera settings:', {
+      fov: this.camera.fov,
+      aspect: this.camera.aspect,
+      near: this.camera.near,
+      far: this.camera.far,
+      zoom: this.camera.zoom
+    });
+
+    console.log('복사용 코드:');
+    console.log(
+      `camera.position.set(${p.x.toFixed(4)}, ${p.y.toFixed(4)}, ${p.z.toFixed(4)});`
+    );
+    console.log(
+      `camera.rotation.set(${r.x.toFixed(4)}, ${r.y.toFixed(4)}, ${r.z.toFixed(4)});`
+    );
+    console.groupEnd();
+  }
+
   private onKeyDown = (event: KeyboardEvent) => {
     const key = event.key.toLowerCase();
 
+    if (key === '5' && !event.repeat) {
+      this.logCameraSettings();
+      return;
+    }
+
+
     if (
       [
-        'w', 'a', 's', 'd', ' ', 'shift',
-        'arrowup', 'arrowdown', 'arrowleft', 'arrowright',
+        'w',
+        'a',
+        's',
+        'd',
+        ' ',
+        'shift',
+        'arrowup',
+        'arrowdown',
+        'arrowleft',
+        'arrowright',
         'enter',
       ].includes(key)
     ) {
@@ -203,8 +258,8 @@ export class CameraController {
   };
 
   update(dt: number) {
-    const speed = this.moveSpeed *
-      (this.keys.has('shift') ? this.sprintMultiplier : 1);
+    const speed =
+      this.moveSpeed * (this.keys.has('shift') ? this.sprintMultiplier : 1);
 
     if (this.keys.has('arrowleft')) {
       this.camera.rotation.y += this.lookSpeed * dt;
@@ -225,7 +280,7 @@ export class CameraController {
     this.camera.rotation.x = THREE.MathUtils.clamp(
       this.camera.rotation.x,
       -1.45,
-      1.45
+      1.45,
     );
 
     this.camera.rotation.z = 0;
@@ -233,13 +288,13 @@ export class CameraController {
     this.forward.set(
       -Math.sin(this.camera.rotation.y),
       0,
-      -Math.cos(this.camera.rotation.y)
+      -Math.cos(this.camera.rotation.y),
     );
 
     this.right.set(
       Math.cos(this.camera.rotation.y),
       0,
-      -Math.sin(this.camera.rotation.y)
+      -Math.sin(this.camera.rotation.y),
     );
 
     if (this.keys.has('w')) {
