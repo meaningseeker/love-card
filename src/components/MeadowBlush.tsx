@@ -1126,17 +1126,9 @@ export default function MeadowBlush(props: MeadowBlushProps) {
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(50, 1, 0.05, 300);
-    camera.position.set(
-  -0.17905659470907812,
-  1,
-  0.38280264004689
-);
+    camera.position.set(0.4953, 1.8036, 15.1313);
 
-camera.rotation.set(
-  0,
-  -0.24581179660432048,
-  0
-);
+    camera.rotation.set(-0.0506, -0.1899, 0.0);
     const cameraController = new CameraController(camera);
 
     const quadGeo = new THREE.PlaneGeometry(2, 2);
